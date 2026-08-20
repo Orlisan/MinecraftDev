@@ -309,6 +309,15 @@ class MinecraftTemplates : FileTemplateGroupDescriptorFactory {
         const val NEOFORGE_MOB_EFFECT_TEMPLATE = "NeoForgeMobEffect.java"
 
         const val JSON_ENCHANTMENT_TEMPLATE = "JsonEnchantment.json"
+        const val JSON_BLOCK_STATE_TEMPLATE = "BlockState.json"
+        const val JSON_BLOCK_MODEL_TEMPLATE = "BlockModel.json"
+        const val JSON_ITEM_MODEL_TEMPLATE = "ItemModel.json"
+        const val JSON_ITEM_DEFINITION_TEMPLATE = "ItemDefinition.json"
+        const val JSON_BLOCK_ITEM_MODEL_TEMPLATE = "BlockItemModel.json"
+
+        const val JSON_DIMENSION_TEMPLATE = "Dimension.json"
+        const val JSON_DIMENSION_TYPE_TEMPLATE = "DimensionType.json"
+
     }
 
     private fun template(fileName: String, displayName: String? = null) = CustomDescriptor(fileName, displayName)
