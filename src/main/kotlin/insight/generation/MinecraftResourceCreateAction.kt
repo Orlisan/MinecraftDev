@@ -215,7 +215,7 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
                     .compute<PsiFile?, Throwable> {
                         val enchDir = dir.mkdirIfAbsent("enchantment")
                         createFromTemplate(
-                            name, enchDir, modid, MinecraftTemplates.JSON_DIMENSION_TYPE_TEMPLATE)
+                            name, enchDir, modid, MinecraftTemplates.JSON_ENCHANTMENT_TEMPLATE)
                     }
             }
             else -> return createFromTemplate(name, dir, modid, templateName)
