@@ -83,8 +83,7 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
 
         val module = directory.findModule() ?: return
         val mcVersion = MinecraftFacet.getInstance(module, McpModuleType)?.getSettings()
-            ?.minecraftVersion?.let(SemanticVersion::parse) ?: MinecraftFacet.getInstance(module, FabricModuleType)
-            ?.computeVersion() ?: MinecraftFacet.getInstance(module, NeoForgeModuleType)?.computeVersion()
+            ?.minecraftVersion?.let(SemanticVersion::parse)
 
         val icon = PlatformAssets.MINECRAFT_ICON
 
