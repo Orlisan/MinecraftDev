@@ -25,4 +25,7 @@ object GeneralAssets : Assets() {
     val PLUGIN = loadIcon("/assets/icons/general/plugin.png")
 
     val MC_TEMPLATE = loadIcon("/assets/icons/general/MinecraftTemplate.png")
+
+    val FLAGS = loadFlagAtlas("/assets/icons/general/LanguagesFlags.png")
+    val TICK = loadIcon("/assets/icons/general/LangTick.png")
 }

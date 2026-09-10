@@ -28,4 +28,36 @@ object TranslationConstants {
     const val ALLOW_ARBITRARY_ARGS = "allowArbitraryArgs"
     const val PREFIX = "prefix"
     const val SUFFIX = "suffix"
+
+    val LANG_NAMES: List<Pair<String, String>> = listOf(
+        "French" to "fr_fr",
+        "Italian" to "it_it",
+        "English" to "en_us",
+        "Spanish" to "es_es",
+
+        "French" to "fr_fr",
+        "Italian" to "it_it",
+        "English" to "en_us",
+        "Spanish" to "es_es",
+
+        "French" to "fr_fr",
+        "Italian" to "it_it",
+        "English" to "en_us",
+        "Spanish" to "es_es",
+
+        "French" to "fr_fr",
+        "Italian" to "it_it",
+        "English" to "en_us",
+        "Spanish" to "es_es",
+
+        "French" to "fr_fr",
+        "Italian" to "it_it",
+        "English" to "en_us",
+        "Spanish" to "es_es",
+
+        "French" to "fr_fr",
+        "Italian" to "it_it",
+        "English" to "en_us",
+        "Spanish" to "es_es",
+    )
 }

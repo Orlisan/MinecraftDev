@@ -62,6 +62,11 @@ import kotlin.collections.map
 
 object TranslationFiles {
     private val MC_1_12_2 = SemanticVersion.release(1, 12, 2)
+    private var LOCALE = "en_us";
+
+    fun changeLocale(newLocale: String) {
+        LOCALE = newLocale;
+    }
 
     fun isTranslationFile(file: VirtualFile?): Boolean {
         val mcPath = file?.mcPath ?: return false
@@ -72,7 +77,7 @@ object TranslationFiles {
         file?.nameWithoutExtension?.lowercase(Locale.ENGLISH)
 
     fun isDefaultLocale(file: VirtualFile?) =
-        file?.nameWithoutExtension?.lowercase(Locale.ENGLISH) == TranslationConstants.DEFAULT_LOCALE
+        file?.nameWithoutExtension?.lowercase(Locale.ENGLISH) == LOCALE
 
     tailrec fun seekTranslation(element: PsiElement): PsiNamedElement? {
         // don't use elvis here, K2 doesn't think it's a tail recursive call if you do
@@ -132,7 +137,7 @@ object TranslationFiles {
         val files = FileTypeIndex.getFiles(
             JsonFileType.INSTANCE,
             GlobalSearchScope.moduleScope(module),
-        ).filter { getLocale(it) == TranslationConstants.DEFAULT_LOCALE }
+        ).filter { getLocale(it) == LOCALE }
 
         for (file in files) {
             val psiFile = PsiManager.getInstance(context.project).findFile(file) ?: continue
@@ -169,7 +174,7 @@ object TranslationFiles {
         val files = FileTypeIndex.getFiles(
             if (jsonVersion) JsonFileType.INSTANCE else LangFileType,
             GlobalSearchScope.moduleScope(module),
-        ).filter { getLocale(it) == TranslationConstants.DEFAULT_LOCALE }
+        ).filter { getLocale(it) == LOCALE }
         val domains = files.asSequence().mapNotNull { it.mcDomain }.distinct().sorted().toList()
         if (domains.size > 1) {
             DataManager.getInstance().dataContextFromFocusAsync.onSuccess {
@@ -339,8 +344,9 @@ object TranslationFiles {
 
         val defaultTranslationFile = FileBasedIndex.getInstance()
             .getContainingFiles(
+
                 TranslationIndex.Util.NAME,
-                TranslationConstants.DEFAULT_LOCALE,
+                LOCALE,
                 GlobalSearchScope.moduleScope(module),
             )
             .asSequence()
