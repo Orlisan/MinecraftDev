@@ -26,6 +26,8 @@ object GeneralAssets : Assets() {
 
     val MC_TEMPLATE = loadIcon("/assets/icons/general/MinecraftTemplate.png")
 
+    //Translation Specific assets (too low for a dedicated object)
     val FLAGS = loadFlagAtlas("/assets/icons/general/LanguagesFlags.png")
     val TICK = loadIcon("/assets/icons/general/LangTick.png")
+    val TRANSLATIONS_ICON = loadIcon("/assets/icons/general/LangIcon.png")
 }

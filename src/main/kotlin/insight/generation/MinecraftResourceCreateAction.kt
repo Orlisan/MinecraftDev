@@ -1,5 +1,6 @@
 package com.demonwav.mcdev.insight.generation
 
+import com.demonwav.mcdev.insight.mkdirIfAbsent
 import com.demonwav.mcdev.asset.GeneralAssets
 import com.demonwav.mcdev.asset.MCDevBundle
 import com.demonwav.mcdev.asset.PlatformAssets
@@ -126,9 +127,7 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
         templateName: @NonNls String?
     ): @NlsContexts.Command String = Const.CAPTION
 
-    fun PsiDirectory.mkdirIfAbsent(name: String): PsiDirectory {
-        return findSubdirectory(name) ?: createSubdirectory(name)
-    }
+
 
     override fun createFile(name: String?, templateName: String?, dir: PsiDirectory?): PsiFile? {
         val dir = dir ?: return null

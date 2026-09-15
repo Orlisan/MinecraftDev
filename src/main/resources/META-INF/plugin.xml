@@ -34,7 +34,8 @@
     <depends optional="true" config-file="mcdev-kotlin.xml">org.jetbrains.kotlin</depends>
     <depends optional="true" config-file="mcdev-toml.xml">org.toml.lang</depends>
     <depends optional="true" config-file="mcdev-yaml.xml">org.jetbrains.plugins.yaml</depends>
-
+    
+    
     <id>com.demonwav.minecraft-dev</id>
     <name>Minecraft Development</name>
     <vendor email="kyle@denwav.dev" url="https://mcdev.io/">minecraft-dev</vendor>
@@ -1755,7 +1756,11 @@
         </action>
         <action class="com.demonwav.mcdev.insight.generation.MinecraftResourceCreateAction" id="CreateMinecraftJson"
                 text="Minecraft Json" description="Create skeleton jsons used in Minecraft Mods and datapacks">
-            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewFile"/>
+        </action>
+        <action class="com.demonwav.mcdev.translations.actions.CreateTranslationsAction" id="CreateMinecraftTranslations"
+                text="Minecraft Translations" description="Create custom translation using Groq API">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewFile"/>
         </action>
         <action class="com.demonwav.mcdev.platform.mcp.actions.CopyAwAction" id="CopyAWAction"
                 text="AW Entry"

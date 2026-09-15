@@ -28,36 +28,31 @@ object TranslationConstants {
     const val ALLOW_ARBITRARY_ARGS = "allowArbitraryArgs"
     const val PREFIX = "prefix"
     const val SUFFIX = "suffix"
-
     val LANG_NAMES: List<Pair<String, String>> = listOf(
         "French" to "fr_fr",
         "Italian" to "it_it",
         "English" to "en_us",
         "Spanish" to "es_es",
-
-        "French" to "fr_fr",
-        "Italian" to "it_it",
-        "English" to "en_us",
-        "Spanish" to "es_es",
-
-        "French" to "fr_fr",
-        "Italian" to "it_it",
-        "English" to "en_us",
-        "Spanish" to "es_es",
-
-        "French" to "fr_fr",
-        "Italian" to "it_it",
-        "English" to "en_us",
-        "Spanish" to "es_es",
-
-        "French" to "fr_fr",
-        "Italian" to "it_it",
-        "English" to "en_us",
-        "Spanish" to "es_es",
-
-        "French" to "fr_fr",
-        "Italian" to "it_it",
-        "English" to "en_us",
-        "Spanish" to "es_es",
+        "Chinese" to "zh_cn",
+        "Portuguese" to "pt_br",
+        "Russian" to "ru_ru",
+        "German" to "de_de",
+        "Japanese" to "ja_jp",
+        "Korean" to "ko_kr",
+        "Indonesian" to "id_id",
+        "Thai" to "th_th",
+        "Turkish" to "tr_tr",
+        "Polish" to "pl_pl",
+        "Ukrainian" to "uk_ua",
+        "Arabic" to "ar_sa",
+        "Dutch" to "nl_nl",
+        "Czech" to "cs_cz",
+        "Swedish" to "sv_se",
+        "Finnish" to "fi_fi",
+        "Vietnamese" to "vi_vn",
+        "Malay" to "ms_my",
+        "Hungarian" to "hu_hu",
+        "Romanian" to "ro_ro"
     )
+
 }

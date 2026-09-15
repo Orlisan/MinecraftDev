@@ -57,8 +57,7 @@ import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.DocumentUtil
 import com.intellij.util.indexing.FileBasedIndex
-import java.util.Locale
-import kotlin.collections.map
+import java.util.*
 
 object TranslationFiles {
     private val MC_1_12_2 = SemanticVersion.release(1, 12, 2)
@@ -156,7 +155,6 @@ object TranslationFiles {
                 context.mcVersion ?: return Result.failure(IllegalArgumentException("Cannot determine MC version for element $context"))
             jsonVersion = version > MC_1_12_2
         }
-
         fun write(files: Iterable<VirtualFile>) {
             for (file in files) {
                 val psiFile = PsiManager.getInstance(context.project).findFile(file) ?: continue
@@ -253,14 +251,13 @@ object TranslationFiles {
         return result.removeSuffix("\n")
     }
 
-    private fun PsiFile.persistAsJson(entries: Iterable<FileEntry>) {
-        val rootObject = this.firstChild as? JsonObject ?: return
-        val doc = FileDocumentManager.getInstance().getDocument(this.virtualFile) ?: return
-        val indent = rootObject.propertyList.firstOrNull()?.let { DocumentUtil.getIndent(doc, it.textOffset) } ?: "  "
-        val content = generateJsonFile(rootObject.propertyList.isNotEmpty(), indent, entries)
-        // Root object ends with brace element, so insert before that
-        doc.insertString(rootObject.lastChild.prevSibling.textOffset, content)
-    }
+   private fun PsiFile.persistAsJson(entries: Iterable<FileEntry>) {
+    val rootObject = this.firstChild as? JsonObject ?: return
+    val doc = FileDocumentManager.getInstance().getDocument(this.virtualFile) ?: return
+    val indent = rootObject.propertyList.firstOrNull()?.let { DocumentUtil.getIndent(doc, it.textOffset) } ?: "  "
+    val content = generateJsonFile(rootObject.propertyList.isNotEmpty(), indent, entries)
+    doc.insertString(rootObject.lastChild.textOffset, content)
+}
 
     private fun PsiFile.findKeyForTextAsJson(text: String): String? {
         val rootObject = this.firstChild as? JsonObject ?: return null

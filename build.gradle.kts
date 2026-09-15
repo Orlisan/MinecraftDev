@@ -102,6 +102,11 @@ dependencies {
     implementation(libs.sentry) {
         exclude(group = "org.slf4j")
     }
+    
+    implementation("com.openai:openai-java:4.9.0") {
+    exclude(group = "org.jetbrains.kotlin")
+    exclude(group = "org.jetbrains.kotlinx")
+    }
 
     implementation(libs.jspecify)
 

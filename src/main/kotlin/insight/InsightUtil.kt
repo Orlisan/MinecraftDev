@@ -23,6 +23,7 @@ package com.demonwav.mcdev.insight
 import com.demonwav.mcdev.facet.MinecraftFacet
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.psi.PsiClassType
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiModifier
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
@@ -77,3 +78,7 @@ val UMethod.uastEventParameterPair: Pair<UParameter, UClass>?
         val resolve = type.resolve()?.toUElementOfType<UClass>() ?: return null
         return firstParameter to resolve
     }
+
+fun PsiDirectory.mkdirIfAbsent(name: String): PsiDirectory {
+    return findSubdirectory(name) ?: createSubdirectory(name)
+}
