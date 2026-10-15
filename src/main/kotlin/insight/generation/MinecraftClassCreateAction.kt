@@ -111,7 +111,7 @@ class MinecraftClassCreateAction :
 
         if (isFabric) {
             val icon = PlatformAssets.FABRIC_ICON
-            if (mcVersion != null && mcVersion >= MinecraftVersions.MC26_1) {
+            if (mcVersion == null || mcVersion >= MinecraftVersions.MC26_1) {
                 builder.addKind("Block", icon, MinecraftTemplates.FABRIC_26_1_BLOCK_TEMPLATE)
                 builder.addKind("Item", icon, MinecraftTemplates.FABRIC_26_1_ITEM_TEMPLATE)
                 builder.addKind("Mob effect", icon, MinecraftTemplates.FABRIC_26_1_MOB_EFFECT_TEMPLATE)
