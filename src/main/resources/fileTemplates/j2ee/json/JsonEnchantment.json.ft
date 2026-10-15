@@ -2,7 +2,7 @@
   "description": {
     "translate": "enchantment.${MODID}.${NAME}"
   },
-  "supported_items": "#yourtag",
+  "supported_items": "#${MODID}:yourtag",
   "weight": 1,
   "max_level": 3,
   "min_cost": {
