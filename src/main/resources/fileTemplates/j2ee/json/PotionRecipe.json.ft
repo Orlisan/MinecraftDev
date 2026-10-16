@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "${INPUT}",
+    "potion_contents": {
+      "potions": "${BASEPOTION}"
+    }
+  },
+  "output": {
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "${RESULT}"
+      }
+    },
+    "id": "${OUTPUT}"
+  },
+  "reagent": {
+    "item": "${REAGENT}"
+  }
+}

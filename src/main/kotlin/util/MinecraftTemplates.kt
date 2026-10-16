@@ -318,6 +318,7 @@ class MinecraftTemplates : FileTemplateGroupDescriptorFactory {
         const val JSON_DIMENSION_TEMPLATE = "Dimension.json"
         const val JSON_DIMENSION_TYPE_TEMPLATE = "DimensionType.json"
 
+        const val JSON_POTION_RECIPE_TEMPLATE = "PotionRecipe.json"
     }
 
     private fun template(fileName: String, displayName: String? = null) = CustomDescriptor(fileName, displayName)

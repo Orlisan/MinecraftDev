@@ -6,6 +6,7 @@ import com.demonwav.mcdev.asset.MCDevBundle
 import com.demonwav.mcdev.asset.PlatformAssets
 import com.demonwav.mcdev.facet.MinecraftFacet
 import com.demonwav.mcdev.insight.generation.MinecraftClassCreateAction.ClassInputValidator
+import com.demonwav.mcdev.insight.generation.ui.PotionGenerationDialog
 import com.demonwav.mcdev.platform.fabric.FabricModuleType
 import com.demonwav.mcdev.platform.forge.ForgeModuleType
 import com.demonwav.mcdev.platform.mcp.McpModuleType
@@ -99,8 +100,13 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
                     builder.addKind("BlockItem", icon, "OldBlockItemStructure")
                 }
             } else {
+            
                 builder.addKind("Dimension", icon, "DimensionStructure")
                 builder.addKind("Enchantment", icon, "EnchantmentStructure")
+                
+             //   if (mcVersion >= MinecraftVersions.MC26_3) {
+                    builder.addKind("Potion recipes (26.3+)", icon, "Potion")
+               // }
             }
         } else if (mcVersion != null && findModid(directory, module) != null) {
             if (!isInAssets(directory)) {
@@ -126,7 +132,6 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
         newName: @NonNls String,
         templateName: @NonNls String?
     ): @NlsContexts.Command String = Const.CAPTION
-
 
 
     override fun createFile(name: String?, templateName: String?, dir: PsiDirectory?): PsiFile? {
@@ -194,7 +199,8 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
                         val typeDir = dir.mkdirIfAbsent("dimension_type")
                         val result =
                             createFromTemplate(
-                                name, typeDir, modid, MinecraftTemplates.JSON_DIMENSION_TYPE_TEMPLATE)
+                                name, typeDir, modid, MinecraftTemplates.JSON_DIMENSION_TYPE_TEMPLATE
+                            )
                         if (result != null) {
                             val dimDir = dir.mkdirIfAbsent("dimension")
                             createFromTemplate(
@@ -207,19 +213,134 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
                         result
                     }
             }
+
+            templateName.equals("Potion") -> {
+                return WriteCommandAction.writeCommandAction(dir.project)
+                    .withName(Const.CAPTION)
+                    .compute<PsiFile?, Throwable> {
+                        val brewdir = dir.mkdirIfAbsent("recipe").mkdirIfAbsent("brewing")
+                        val potionDialog = PotionGenerationDialog(dir.project)
+                        if (potionDialog.showAndGet()) {
+                            val reagent = potionDialog.reagent.text
+                            val base = potionDialog.basePotion.text
+                            val result = potionDialog.result.text
+                            val p = "minecraft:potion"
+                            val s = "minecraft:splash_potion"
+                            val l = "minecraft:lingering_potion"
+                            val result2 =   createPotionFromTemplate(name, brewdir, 
+                                reagent, base, result, p,p )
+                            if (potionDialog.splash) {
+                                //SI
+                                createPotionFromTemplate(name+"_splash_from_regular", brewdir, 
+                                   "minecraft:gunpowder", result, result, p, s)
+                                
+                                createPotionFromTemplate(name+"_from_splash", brewdir,
+                                reagent, base, result, s,s )
+                            }
+                            if (potionDialog.lingering) {
+                                //SI
+                                createPotionFromTemplate(name+"_lingering_from_splash", brewdir, 
+                                    "minecraft:dragon_breath", result, result, s, l)
+                                  createPotionFromTemplate(name+"_from_lingering", brewdir,
+                                reagent, base, result, l,l)
+                            }
+                            if (potionDialog.long) {
+                                //SI
+                                createPotionFromTemplate("long_$name", brewdir,
+                                    "minecraft:redstone", result, result.atStartPath("long_"), p, p)
+                                if(potionDialog.splash) {
+                                    //SI
+                                    createPotionFromTemplate("long_splash_${name}_from_splash", brewdir,
+                                        "minecraft:redstone", result, result.atStartPath("long_"), s, s)
+                                    //SI
+                                    createPotionFromTemplate("long_splash_${name}_from_long", brewdir,
+                                        "minecraft:gunpowder", result.atStartPath("long_"), result.atStartPath("long_"), p, s)
+                                }
+                                if(potionDialog.lingering) {
+                                   //SI
+                                    createPotionFromTemplate("long_lingering_${name}_from_lingering", brewdir,
+                                        "minecraft:redstone", result, result.atStartPath("long_"), l, l)
+                                   //SI
+                                    createPotionFromTemplate("long_lingering_${name}_from_long_splash", brewdir,
+                                        "minecraft:dragon_breath", result.atStartPath("long_"), result.atStartPath("long_"), s, l)
+
+                                }
+                            }
+                            if (potionDialog.powered) {
+                                //SI
+                                createPotionFromTemplate("strong_$name", brewdir, 
+                                    "minecraft:glowstone_dust", result, result.atStartPath("strong_"), p, p)
+                                if(potionDialog.splash) {
+                                    //SI
+                                    createPotionFromTemplate("strong_splash_${name}_from_splash", brewdir,
+                                        "minecraft:glowstone_dust", result, result.atStartPath("strong_"), s, s)
+                                    //SI
+                                    createPotionFromTemplate("strong_splash_${name}_from_strong", brewdir,
+                                        "minecraft:gunpowder", result.atStartPath("strong_"), result.atStartPath("strong_"), p, s)
+
+                                }
+                                if(potionDialog.lingering) {
+                                    //SI
+                                    createPotionFromTemplate("strong_lingering_${name}_from_lingering", brewdir,
+                                        "minecraft:glowstone_dust", result, result.atStartPath("strong_"), l, l)
+                                    //SI
+                                    createPotionFromTemplate("strong_lingering_${name}_from_strong_splash", brewdir,
+                                        "minecraft:dragon_breath", result.atStartPath("strong_"), result.atStartPath("strong_"), s, l)
+
+                                }
+                            }
+                            return@compute result2
+                        }
+                        null
+                    }
+            }
             templateName.equals("EnchantmentStructure") -> {
                 return WriteCommandAction.writeCommandAction(dir.project)
                     .withName(Const.CAPTION)
                     .compute<PsiFile?, Throwable> {
                         val enchDir = dir.mkdirIfAbsent("enchantment")
                         createFromTemplate(
-                            name, enchDir, modid, MinecraftTemplates.JSON_ENCHANTMENT_TEMPLATE)
+                            name, enchDir, modid, MinecraftTemplates.JSON_ENCHANTMENT_TEMPLATE
+                        )
                     }
             }
+
             else -> return createFromTemplate(name, dir, modid, templateName)
         }
     }
 
+    fun createPotionFromTemplate(
+        name: String?,
+        dir: PsiDirectory,
+        reagent: String,
+        basePotion: String,
+        resultPotion: String,
+        inputItem: String,
+        outputItem: String
+    ): PsiFile? {
+        val template = FileTemplateManager.getInstance(dir.project)
+            .getInternalTemplate(MinecraftTemplates.JSON_POTION_RECIPE_TEMPLATE ?: return null)
+        return createFileFromTemplate(
+            name,
+            template,
+            dir,
+            defaultTemplateProperty,
+            true,
+            Collections.emptyMap(),
+            mapOf(
+                "REAGENT" to reagent,
+                "RESULT" to resultPotion,
+                "BASEPOTION" to basePotion,
+                "INPUT" to inputItem,
+                "OUTPUT" to outputItem
+            )
+        )
+    }
+
+    fun String.atStartPath(value: String): String {
+        val split = this.split(":")
+        return split[0]+":"+value+split[1]
+    }
     fun createFromTemplate(name: String?, dir: PsiDirectory, modid: String, templateName: String?): PsiFile? {
         val template = FileTemplateManager.getInstance(dir.project)
             .getInternalTemplate(templateName ?: return null)
@@ -230,7 +351,7 @@ class MinecraftResourceCreateAction : CreateFileFromTemplateAction(
             defaultTemplateProperty,
             true,
             Collections.emptyMap(),
-            mapOf(Pair("MODID", modid))
+            mapOf("MODID" to modid)
         )
     }
 
