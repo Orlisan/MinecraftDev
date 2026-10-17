@@ -35,9 +35,10 @@ class TranslationDialog(
             checkBox("Remember").bindSelected(::rememberKey)
             cell(
                 ContextHelpLabel.create(
-                    "Create translations", "Insert your Groq Api Key\n avalaible " +
+                    "Create translations", "<html>Insert your Groq Api Key\n avalaible " +
                         "on https://console.groq.com/keys " +
-                        "\n and insert that here for\n automatic translate your mod\n in 24 languages"
+                        "\n and insert that here for\n automatic translate your mod\n in 24+ languages" +
+                        "<b>Warning: Translations uses AI models that might hallucinate.</b></html>"
                 )
             )
             if (remembedApiKey.isNotBlank()) {
@@ -190,8 +191,21 @@ class TranslationDialog(
                         }
                     }
                 }
+                row("Other languages: ") {
+                    otherTextField = textField().component
+                    cell(
+                        ContextHelpLabel.create(
+                            "Insert more languages", "Insert, with the minecraft xy_za langs codes (ex. en_us, " +
+                                "\n, unexistent codes will be ignored). the others languages that not are above that you want translate in" +
+                                "\nsepare the codes with ',' spaces are allowed"
+                        )
+                    )
+                }
             }
+        lateinit var otherTextField: JBTextField
+        override fun doOKAction() {
+            selectedLangs.addAll(otherTextField.text.split(",").map{it.trim()}.filter {it.isNotBlank()})
+            super.doOKAction()
+        }
     }
-
 }
-

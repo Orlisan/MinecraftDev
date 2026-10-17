@@ -108,13 +108,15 @@ class CreateTranslationQuickFix : LocalQuickFix {
                         ?: error("No Resources Root Found")
                     rDir.mkdirIfAbsent("assets").mkdirIfAbsent(modId).mkdirIfAbsent("lang")
                 }
+                println("LINGUE SELEZIONATE: $langs")
                 scope.launch {
 
                     for ((first, second) in returnedCouples) {
                         val translations = askGemini(second, langs, client)
+                        println("RISULTATO: $translations")
                         if (translations.isEmpty()) continue
                         runOnEdtAndWait(module.project) action@{
-                            for (lang in langs) {
+                            for (lang in translations.map {it.first}) {
                                 var file = langDir.findFile("$lang.json")
                                 if (file == null || file.isDirectory) {
                                     val realfile = langDir.createFile("$lang.json")
@@ -167,9 +169,9 @@ class CreateTranslationQuickFix : LocalQuickFix {
                 val prompt = "You must faithfully translate " +
                     "the string specified below, deducing " +
                     "the source language, into the languages " +
-                    ",specified as xy_za strings, " +
+                    ",specified as xy_za or xyz_ab strings, " +
                     "following Minecraft's translation file naming conventions" +
-                    " (e.g., en_us = American English)." +
+                    " (e.g., en_us = American English, lmo_it = Lombard Dialect)." +
                     "Answer this message only a json format exatly, without any kind of format type like \"```\", like:" +
                     "\"la_ng1\":\"Translation1\"," +
                     "\"la_ng2\":\"Translation2\"" +
@@ -177,7 +179,7 @@ class CreateTranslationQuickFix : LocalQuickFix {
                     "placing them in the same context as before; Do not translate into" +
                     " the language in which the user" +
                     " wrote the initial translation by simply using that text as the translation." +
-                    " Langs: $langs , String to translate: $trad"
+                    " Langs: $langs , Strding to translate: $trad"
                 val params = ChatCompletionCreateParams.builder()
                     .model("openai/gpt-oss-120b")
                     .addUserMessage(prompt)
@@ -190,7 +192,7 @@ class CreateTranslationQuickFix : LocalQuickFix {
                 jsonObject.entrySet().forEach { entry ->
                     result.add(entry.key.toString() to entry.value.asString)
                 }
-                return result
+                return result.filter {it.first.matches("^[a-z]{2,3}_[a-z]{2}$".toRegex())}
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Messages.showErrorDialog("Error in Translations Generation: ${e.message}", "Translation Error")
